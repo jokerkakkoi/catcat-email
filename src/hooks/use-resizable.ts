@@ -30,11 +30,6 @@ export function useResizable({
     offsetRef.current = offsetProp;
   }, [offsetProp]);
 
-  const getOffset = React.useCallback(() => {
-    const offset = offsetRef.current;
-    return typeof offset === "function" ? offset() : offset;
-  }, []);
-
   const handleMouseDown = React.useCallback(() => {
     setIsDragging(true);
   }, []);
@@ -46,16 +41,17 @@ export function useResizable({
   const handleMouseMove = React.useCallback(
     (e: MouseEvent) => {
       if (isDragging) {
-        // 实时获取最新的 offset
-        const currentOffset = getOffset();
+        // 直接从 ref 获取最新 offset，避免闭包问题
+        const currentOffset = offsetRef.current;
+        const offsetValue = typeof currentOffset === "function" ? currentOffset() : currentOffset;
         const newWidth = Math.max(
           minWidth,
-          Math.min(maxWidth, e.clientX - currentOffset)
+          Math.min(maxWidth, e.clientX - offsetValue)
         );
         setWidth(newWidth);
       }
     },
-    [isDragging, minWidth, maxWidth, getOffset]
+    [isDragging, minWidth, maxWidth]
   );
 
   React.useEffect(() => {
