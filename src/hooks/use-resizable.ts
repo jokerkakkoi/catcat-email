@@ -4,24 +4,36 @@ interface UseResizableOptions {
   initialWidth: number;
   minWidth: number;
   maxWidth: number;
-  /** 偏移量，用于计算相对宽度（如 Pane 需要减去 Sidebar 宽度） */
-  offset?: number;
+  /** 偏移量，可以是固定值或返回动态值的函数 */
+  offset?: number | (() => number);
 }
 
 interface UseResizableReturn {
   width: number;
   isDragging: boolean;
   handleMouseDown: () => void;
+  setWidth: React.Dispatch<React.SetStateAction<number>>;
 }
 
 export function useResizable({
   initialWidth,
   minWidth,
   maxWidth,
-  offset = 0,
+  offset: offsetProp = 0,
 }: UseResizableOptions): UseResizableReturn {
   const [width, setWidth] = React.useState(initialWidth);
   const [isDragging, setIsDragging] = React.useState(false);
+  const offsetRef = React.useRef(offsetProp);
+
+  // 更新 offsetRef，支持动态 offset
+  React.useEffect(() => {
+    offsetRef.current = offsetProp;
+  }, [offsetProp]);
+
+  const getOffset = React.useCallback(() => {
+    const offset = offsetRef.current;
+    return typeof offset === "function" ? offset() : offset;
+  }, []);
 
   const handleMouseDown = React.useCallback(() => {
     setIsDragging(true);
@@ -34,15 +46,16 @@ export function useResizable({
   const handleMouseMove = React.useCallback(
     (e: MouseEvent) => {
       if (isDragging) {
-        // 计算实际宽度：鼠标位置减去偏移量
+        // 实时获取最新的 offset
+        const currentOffset = getOffset();
         const newWidth = Math.max(
           minWidth,
-          Math.min(maxWidth, e.clientX - offset)
+          Math.min(maxWidth, e.clientX - currentOffset)
         );
         setWidth(newWidth);
       }
     },
-    [isDragging, minWidth, maxWidth, offset]
+    [isDragging, minWidth, maxWidth, getOffset]
   );
 
   React.useEffect(() => {
@@ -66,5 +79,5 @@ export function useResizable({
     };
   }, [isDragging, handleMouseMove, handleMouseUp]);
 
-  return { width, isDragging, handleMouseDown };
+  return { width, isDragging, handleMouseDown, setWidth };
 }

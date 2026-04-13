@@ -14,12 +14,12 @@ function App() {
     maxWidth: 280,
   });
 
-  // Pane 拖拽调整（偏移量 = Sidebar 宽度 + 拖拽条宽度）
+  // Pane 拖拽调整（使用函数式 offset，确保每次拖拽时获取最新的 sidebar 宽度）
   const pane = useResizable({
     initialWidth: 300,
     minWidth: 240,
     maxWidth: 360,
-    offset: sidebar.width + 4, // 4px 是拖拽条宽度
+    offset: () => sidebar.width + 4, // 函数式 offset，实时计算
   });
 
   return (
