@@ -13,6 +13,7 @@ interface Email {
 
 interface PaneProps {
   className?: string
+  style?: React.CSSProperties
 }
 
 const mockEmails: Email[] = [
@@ -63,15 +64,16 @@ const mockEmails: Email[] = [
   },
 ]
 
-export function Pane({ className }: PaneProps) {
+export function Pane({ className, style }: PaneProps) {
   const [selectedEmailId, setSelectedEmailId] = React.useState<string | null>(null)
 
   return (
     <div
       className={cn(
-        "w-72 h-[calc(100vh-64px)] sticky top-16 bg-gray-50 border-r border-gray-200 flex flex-col shrink-0",
+        "h-[calc(100vh-64px)] sticky top-16 bg-gray-50 border-r border-gray-200 flex flex-col shrink-0",
         className
       )}
+      style={style}
     >
       {/* 标题栏 */}
       <div className="px-4 py-3 border-b border-gray-200 bg-white">

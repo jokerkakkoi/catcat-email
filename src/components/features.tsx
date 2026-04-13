@@ -4,10 +4,7 @@ import {
   Globe, 
   Smartphone, 
   Code2, 
-  Layers,
   Cpu,
-  Lock,
-  Rocket
 } from "lucide-react"
 
 const features = [

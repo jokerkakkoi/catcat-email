@@ -1,80 +1,51 @@
-import * as React from "react";
 import "./assets/styles/globals.css";
 import Navigation from "./components/navigation/navigation";
 import { Sidebar } from "./components/sidebar/sidebar";
 import { Pane } from "./components/pane/pane";
-import Hero from "./components/hero";
-import Features from "./components/features";
-import Platforms from "./components/platforms";
-import CTA from "./components/cta";
-import Footer from "./components/footer";
+import { EmailContent } from "./components/content/email-content";
+import { ResizableDivider } from "./components/resizable/resizable-divider";
+import { useResizable } from "./hooks/use-resizable";
 
 function App() {
-  const [sidebarWidth, setSidebarWidth] = React.useState(216); // 初始宽度 w-54 = 13.5rem = 216px
-  const [isDragging, setIsDragging] = React.useState(false);
-  const minWidth = 192; // w-54 = 192px
-  const maxWidth = 256; // w-64 = 256px
+  // Sidebar 拖拽调整（无偏移量，从屏幕左侧开始）
+  const sidebar = useResizable({
+    initialWidth: 200,
+    minWidth: 160,
+    maxWidth: 280,
+  });
 
-  const handleMouseDown = React.useCallback(() => {
-    setIsDragging(true);
-  }, []);
-
-  const handleMouseUp = React.useCallback(() => {
-    setIsDragging(false);
-  }, []);
-
-  const handleMouseMove = React.useCallback(
-    (e: MouseEvent) => {
-      if (isDragging) {
-        const newWidth = Math.max(minWidth, Math.min(maxWidth, e.clientX));
-        setSidebarWidth(newWidth);
-      }
-    },
-    [isDragging]
-  );
-
-  React.useEffect(() => {
-    if (isDragging) {
-      document.addEventListener("mousemove", handleMouseMove);
-      document.addEventListener("mouseup", handleMouseUp);
-      document.body.style.cursor = "col-resize";
-      document.body.style.userSelect = "none";
-    } else {
-      document.removeEventListener("mousemove", handleMouseMove);
-      document.removeEventListener("mouseup", handleMouseUp);
-      document.body.style.cursor = "";
-      document.body.style.userSelect = "";
-    }
-
-    return () => {
-      document.removeEventListener("mousemove", handleMouseMove);
-      document.removeEventListener("mouseup", handleMouseUp);
-      document.body.style.cursor = "";
-      document.body.style.userSelect = "";
-    };
-  }, [isDragging, handleMouseMove, handleMouseUp]);
+  // Pane 拖拽调整（偏移量 = Sidebar 宽度 + 拖拽条宽度）
+  const pane = useResizable({
+    initialWidth: 300,
+    minWidth: 240,
+    maxWidth: 360,
+    offset: sidebar.width + 4, // 4px 是拖拽条宽度
+  });
 
   return (
     <div className="min-h-screen bg-white flex flex-col">
       <Navigation />
       <div className="flex flex-1 relative">
-        <Sidebar style={{ width: sidebarWidth }} />
-        {/* 拖拽条 */}
-        <div
-          onMouseDown={handleMouseDown}
-          className="w-1 h-[calc(100vh-64px)] sticky top-16 cursor-col-resize bg-transparent hover:bg-[#24C8DB] transition-colors z-10 flex-shrink-0"
-          style={{
-            backgroundColor: isDragging ? "#24C8DB" : undefined,
-          }}
+        {/* Sidebar */}
+        <Sidebar style={{ width: sidebar.width }} />
+        
+        {/* Sidebar 和 Pane 之间的拖拽条 */}
+        <ResizableDivider
+          isDragging={sidebar.isDragging}
+          onMouseDown={sidebar.handleMouseDown}
         />
-        <Pane />
-        <main className="flex-1 overflow-y-auto">
-          <Hero />
-          <Features />
-          <Platforms />
-          <CTA />
-          <Footer />
-        </main>
+        
+        {/* Pane */}
+        <Pane style={{ width: pane.width }} />
+        
+        {/* Pane 和 Content 之间的拖拽条 */}
+        <ResizableDivider
+          isDragging={pane.isDragging}
+          onMouseDown={pane.handleMouseDown}
+        />
+        
+        {/* 正文内容 */}
+        <EmailContent />
       </div>
     </div>
   );
