@@ -1,15 +1,15 @@
 import * as React from "react"
-import { Menu, MessageSquare, BookOpen, Code2, FileText, Newspaper } from "lucide-react"
+import { Menu, MessageSquare } from "lucide-react"
 
 import { Button } from "@/components/ui/button"
-import { SearchBox } from "./search"
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet"
+import { SearchBox } from "./search"
 
 const navLinks = [
-  { title: "Develop", href: "#develop", icon: Code2 },
-  { title: "Guides", href: "#guides", icon: BookOpen },
-  { title: "Reference", href: "#reference", icon: FileText },
-  { title: "Blog", href: "#blog", icon: Newspaper },
+  { title: "Develop", href: "#develop" },
+  { title: "Guides", href: "#guides" },
+  { title: "Reference", href: "#reference" },
+  { title: "Blog", href: "#blog" },
 ]
 
 function TauriLogo({ className }: { className?: string }) {
@@ -85,17 +85,15 @@ function TwitterIcon(props: React.ComponentProps<"svg">) {
 
 export function Navigation() {
   return (
-    <header className="sticky top-0 z-50 w-full border-b border-black/10 bg-white/80 backdrop-blur-md">
-      <div className="w-full max-w-7xl mx-auto flex h-16 items-center px-4 sm:px-6 lg:px-8">
-        {/* Logo 区域 */}
-        <div className="mr-8 hidden md:flex items-center">
+    <header className="sticky top-0 z-50 w-full border-b border-black/10 bg-white/70 backdrop-blur-md">
+      <div className="flex h-16 items-center px-4 sm:px-6 lg:px-8">
+        <div className="mr-8 flex items-center">
           <a href="/" className="flex items-center space-x-3 group">
             <TauriLogo className="h-8 w-8 transition-transform group-hover:scale-110" />
             <span className="text-xl font-bold text-gray-900 tracking-tight">Tauri</span>
           </a>
         </div>
 
-        {/* Desktop Navigation */}
         <nav className="hidden md:flex items-center space-x-1">
           {navLinks.map((link) => (
             <a
@@ -108,7 +106,6 @@ export function Navigation() {
           ))}
         </nav>
 
-        {/* 移动端菜单 */}
         <Sheet>
           <SheetTrigger asChild>
             <Button
@@ -131,10 +128,9 @@ export function Navigation() {
                   <a
                     key={link.href}
                     href={link.href}
-                    className="flex items-center space-x-3 px-4 py-3 text-gray-600 rounded-lg transition-all hover:text-gray-900 hover:bg-gray-100"
+                    className="px-4 py-3 text-gray-600 rounded-lg transition-all hover:text-gray-900 hover:bg-gray-100 font-medium"
                   >
-                    <link.icon className="h-5 w-5" />
-                    <span className="font-medium">{link.title}</span>
+                    {link.title}
                   </a>
                 ))}
               </nav>
@@ -143,29 +139,23 @@ export function Navigation() {
         </Sheet>
 
         <div className="flex flex-1 items-center justify-end space-x-2">
-          {/* 搜索框 */}
-          <SearchBox />
+          <div className="hidden sm:block">
+            <SearchBox />
+          </div>
 
-          {/* 社交链接 */}
           <nav className="flex items-center space-x-1">
-            <Button variant="ghost" size="icon" className="text-gray-600 hover:text-gray-900 hover:bg-gray-100" asChild>
-              <a href="https://github.com/tauri-apps/tauri" target="_blank" rel="noreferrer">
-                <GithubIcon className="h-4 w-4" />
-                <span className="sr-only">GitHub</span>
-              </a>
-            </Button>
-            <Button variant="ghost" size="icon" className="text-gray-600 hover:text-gray-900 hover:bg-gray-100" asChild>
-              <a href="https://discord.com/invite/tauri" target="_blank" rel="noreferrer">
-                <MessageSquare className="h-4 w-4" />
-                <span className="sr-only">Discord</span>
-              </a>
-            </Button>
-            <Button variant="ghost" size="icon" className="text-gray-600 hover:text-gray-900 hover:bg-gray-100" asChild>
-              <a href="https://twitter.com/TauriApps" target="_blank" rel="noreferrer">
-                <TwitterIcon className="h-4 w-4" />
-                <span className="sr-only">Twitter</span>
-              </a>
-            </Button>
+            <a href="https://github.com/tauri-apps/tauri" target="_blank" rel="noreferrer" className="p-2 text-gray-600 hover:text-gray-900 hover:bg-gray-100 rounded-lg transition-all">
+              <GithubIcon className="h-4 w-4" />
+              <span className="sr-only">GitHub</span>
+            </a>
+            <a href="https://discord.com/invite/tauri" target="_blank" rel="noreferrer" className="p-2 text-gray-600 hover:text-gray-900 hover:bg-gray-100 rounded-lg transition-all">
+              <MessageSquare className="h-4 w-4" />
+              <span className="sr-only">Discord</span>
+            </a>
+            <a href="https://twitter.com/TauriApps" target="_blank" rel="noreferrer" className="p-2 text-gray-600 hover:text-gray-900 hover:bg-gray-100 rounded-lg transition-all">
+              <TwitterIcon className="h-4 w-4" />
+              <span className="sr-only">Twitter</span>
+            </a>
           </nav>
         </div>
       </div>
