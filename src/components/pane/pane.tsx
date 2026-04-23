@@ -1,17 +1,19 @@
-import * as React from "react"
-
-import { cn } from "@/lib/utils"
-import { inboxList } from "@/src/mock"
+import { cn } from "@/lib/utils";
+import type { EmailItem } from "@/src/mock";
 
 interface PaneProps {
-  className?: string
+  emails: EmailItem[];
+  selectedEmailId: string | null;
+  onSelectEmail: (emailId: string) => void;
+  className?: string;
 }
 
-export function Pane({ className }: PaneProps) {
-  const [selectedEmailId, setSelectedEmailId] = React.useState<string | null>(
-    inboxList[0]?.id ?? null
-  )
-
+export function Pane({
+  emails,
+  selectedEmailId,
+  onSelectEmail,
+  className,
+}: PaneProps) {
   return (
     <div
       className={cn(
@@ -20,17 +22,17 @@ export function Pane({ className }: PaneProps) {
       )}
     >
       <div className="px-4 py-3 border-b border-gray-200 bg-white">
-        <h2 className="text-lg font-semibold text-gray-900">邮件列表</h2>
-        <p className="text-sm text-gray-500 mt-0.5">
-          共 {inboxList.length} 封邮件
-        </p>
+        <h2 className="text-lg font-semibold text-gray-900">Inbox</h2>
+        <p className="text-sm text-gray-500 mt-0.5">{emails.length} messages</p>
       </div>
 
       <div className="flex-1 overflow-y-auto">
-        {inboxList.map((email) => (
+        {emails.map((email) => (
           <button
             key={email.id}
-            onClick={() => setSelectedEmailId(email.id)}
+            type="button"
+            aria-pressed={selectedEmailId === email.id}
+            onClick={() => onSelectEmail(email.id)}
             className={cn(
               "w-full text-left px-4 py-3 border-b border-gray-200 transition-colors",
               "hover:bg-white",
@@ -46,7 +48,7 @@ export function Pane({ className }: PaneProps) {
                   email.unread ? "font-semibold text-gray-900" : "text-gray-700"
                 )}
               >
-                {email.sender}
+                {email.from.name}
               </span>
               <span className="text-xs text-gray-400 shrink-0">{email.time}</span>
             </div>
@@ -63,5 +65,5 @@ export function Pane({ className }: PaneProps) {
         ))}
       </div>
     </div>
-  )
+  );
 }
