@@ -60,6 +60,12 @@ const fullEmail: EmailItem = {
       mimeType: "application/pdf",
       sizeLabel: "248 KB",
     },
+    {
+      id: "attachment-invite",
+      name: "invite",
+      mimeType: "text/calendar",
+      sizeLabel: "4 KB",
+    },
   ],
 };
 
@@ -118,6 +124,7 @@ describe("MailReader", () => {
     expect(screen.getByText("review-board.png")).toBeInTheDocument();
     expect(screen.getByText("meeting-notes.pdf")).toBeInTheDocument();
     expect(screen.getByText("PNG")).toBeInTheDocument();
+    expect(screen.getAllByText("CALENDAR")).toHaveLength(2);
     expect(screen.getByText("248 KB")).toBeInTheDocument();
     expect(
       screen.getByRole("img", { name: "review-board.png preview" })

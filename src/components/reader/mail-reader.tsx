@@ -29,7 +29,7 @@ const formatReceivedAt = (receivedAt: string) => {
 const getAttachmentKind = (attachment: EmailAttachment) => {
   const extension = attachment.name.split(".").pop();
 
-  if (extension) {
+  if (extension && extension !== attachment.name) {
     return extension.toUpperCase();
   }
 
