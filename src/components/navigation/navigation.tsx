@@ -3,6 +3,7 @@ import { Menu, MessageSquare } from "lucide-react"
 
 import { Button } from "@/components/ui/button"
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet"
+import { SettingsMenu } from "./settings-menu"
 import { SearchBox } from "./search"
 
 const navLinks = [
@@ -156,6 +157,7 @@ export function Navigation() {
               <TwitterIcon className="h-4 w-4" />
               <span className="sr-only">Twitter</span>
             </a>
+            <SettingsMenu />
           </nav>
         </div>
       </div>
