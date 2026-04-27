@@ -7,6 +7,10 @@ yarn-error.log*
 pnpm-debug.log*
 lerna-debug.log*
 
+# Portable runtime storage
+/storage/*
+!/storage/.gitkeep
+
 node_modules
 dist
 dist-ssr

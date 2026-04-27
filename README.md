@@ -7,3 +7,18 @@ This template should help get you started developing with Tauri, React and Types
 ## Recommended IDE Setup
 
 - [VS Code](https://code.visualstudio.com/) + [Tauri](https://marketplace.visualstudio.com/items?itemName=tauri-apps.tauri-vscode) + [rust-analyzer](https://marketplace.visualstudio.com/items?itemName=rust-lang.rust-analyzer)
+
+## Portable Storage
+
+Runtime data is kept under `storage/`.
+
+- Development builds use the repository root: `storage/`.
+- Release builds use a portable directory next to the executable: `storage/`.
+- Set `CATCAT_STORAGE_DIR` to override the storage root.
+
+The application creates these folders on startup:
+
+- `storage/db`
+- `storage/config`
+- `storage/files`
+- `storage/logs`
